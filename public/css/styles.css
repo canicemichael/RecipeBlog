@@ -38,8 +38,9 @@ a {
   border-radius: 8px;
 }
 
-.category__img--large{
-  height: auto;
+.category__img--large {
+  height: 13em;
+  overflow: hidden;
 }
 
 .category__img img {
