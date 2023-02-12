@@ -10,4 +10,5 @@ db.once('open', function(){
 });
 
 // models
-require('./Category'); 
+require('./Category');
+require('./Recipe');
