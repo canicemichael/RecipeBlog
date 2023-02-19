@@ -7,6 +7,7 @@ const port = process.env.PORT || 3001;
 
 // middlewares
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 app.use(express.static("public"));
 app.use(expressLayouts);
 
