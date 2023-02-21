@@ -316,4 +316,4 @@ async function insertDummyRecipeData() {
   }
 }
 
-// insertDummyRecipeData();
+// insertDummyCategoryData();
