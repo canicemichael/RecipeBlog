@@ -26,6 +26,11 @@ const recipeSchema = new mongoose.Schema({
         type: String,
         requuired: "This field is required."
     },
-})
+});
+
+// inorder to search in fields of name and description
+recipeSchema.index({ name: 'text', description: 'text' });
+// Wildcard for indexing
+// recipeSchema.index({ "$**": 'text' });
 
 module.exports = mongoose.model('Recipe', recipeSchema);

@@ -4,36 +4,40 @@ const Recipe = require("../models/Recipe");
 
 // GET /homepage
 exports.homepage = async (req, res) => {
-    try {
-        const limitNumber = 5;
-        const categories = await Category.find({}).limit(limitNumber);
-        const latest = await Recipe.find({}).sort({_id: -1}).limit(limitNumber);
-        const thai = await Recipe.find({ 'category': 'Thai' }).limit(limitNumber)
-        const american = await Recipe.find({ 'category': 'American' }).limit(limitNumber);
-        const chinese = await Recipe.find({ 'category': 'Chinese' }).limit(limitNumber);
+  try {
+    const limitNumber = 5;
+    const categories = await Category.find({}).limit(limitNumber);
+    const latest = await Recipe.find({}).sort({ _id: -1 }).limit(limitNumber);
+    const thai = await Recipe.find({ category: "Thai" }).limit(limitNumber);
+    const american = await Recipe.find({ category: "American" }).limit(
+      limitNumber
+    );
+    const chinese = await Recipe.find({ category: "Chinese" }).limit(
+      limitNumber
+    );
 
-        const food = { latest, thai, american, chinese };
+    const food = { latest, thai, american, chinese };
 
-        res.render("index", { title: "Cooking Blog - Homepage", categories, food });
-    } catch (error) {
-        res.status(500).send({message: error.message || "Error Occured"});
-    }
-  
+    res.render("index", { title: "Cooking Blog - Homepage", categories, food });
+  } catch (error) {
+    res.status(500).send({ message: error.message || "Error Occured" });
+  }
 };
-
 
 // GET /categories
 // Categories
 exports.exploreCategories = async (req, res) => {
   try {
-      const limitNumber = 20;
-      const categories = await Category.find({}).limit(limitNumber);
+    const limitNumber = 20;
+    const categories = await Category.find({}).limit(limitNumber);
 
-      res.render("categories", { title: "Cooking Blog - Categories", categories });
+    res.render("categories", {
+      title: "Cooking Blog - Categories",
+      categories,
+    });
   } catch (error) {
-      res.status(500).send({message: error.message || "Error Occured"});
+    res.status(500).send({ message: error.message || "Error Occured" });
   }
-
 };
 
 // GET /categories/:id
@@ -41,43 +45,69 @@ exports.exploreCategories = async (req, res) => {
 exports.exploreCategoriesById = async (req, res) => {
   try {
     let categoryId = req.params.id;
-      const limitNumber = 20;
-      const categoryById = await Recipe.find({ 'category': categoryId }).limit(limitNumber);
+    const limitNumber = 20;
+    const categoryById = await Recipe.find({ category: categoryId }).limit(
+      limitNumber
+    );
 
-      res.render("categories", { title: "Cooking Blog - Categories", categoryById });
+    res.render("categories", {
+      title: "Cooking Blog - Categories",
+      categoryById,
+    });
   } catch (error) {
-      res.status(500).send({message: error.message || "Error Occured"});
+    res.status(500).send({ message: error.message || "Error Occured" });
   }
-
 };
-
 
 // GET /recipe/:id
 // Recipe
 exports.exploreRecipe = async (req, res) => {
   try {
-      let recipeId = req.params.id;
-      const recipe = await Recipe.findById(recipeId);
-      res.render("recipe", { title: "Cooking Blog - Recipe", recipe });
+    let recipeId = req.params.id;
+    const recipe = await Recipe.findById(recipeId);
+    res.render("recipe", { title: "Cooking Blog - Recipe", recipe });
   } catch (error) {
-      res.status(500).send({message: error.message || "Error Occured"});
+    res.status(500).send({ message: error.message || "Error Occured" });
   }
-
 };
-
 
 // POST /search
 // Search
 exports.searchRecipe = async (req, res) => {
   try {
-      let recipeId = req.params.id;
-      const recipe = await Recipe.findById(recipeId);
-      res.render("search", { title: "Cooking Blog - Search" });
+    let searchTerm = req.body.searchTerm;
+    let recipe = await Recipe.find({
+      $text: { $search: searchTerm, $diacriticSensitive: true },
+    });
+    // res.json(recipe);
+    res.render("search", { title: "Cooking Blog - Search", recipe, searchTerm });
   } catch (error) {
-      res.status(500).send({message: error.message || "Error Occured"});
+    res.status(500).send({ message: error.message || "Error Occured" });
   }
-
 };
+
+// GET /explore-latest
+// Explore Latest
+exports.exploreLatest = async (req, res) => {
+  try {
+    const limitNumber = 20;
+    const recipe = await Recipe.find({ }).sort({ _id: -1}).limit(
+      limitNumber
+    );
+    
+    res.render("explore-latest", { title: "Cooking Blog - Explore Latest", recipe });
+  } catch (error) {
+    res.status(500).send({ message: error.message || "Error Occured" });
+  }
+};
+
+
+
+
+
+
+
+
 
 
 
@@ -128,10 +158,9 @@ exports.searchRecipe = async (req, res) => {
 
 // insertDummyCategoryData();
 
-
 // async function insertDummyRecipeData() {
 //   try {
-//     await Recipe.insertMany([{      
+//     await Recipe.insertMany([{
 //       "name": "Crab cakes",
 //       "description": "\n        Preheat the oven to 175ºC/gas 3. Lightly grease a 22cm metal or glass pie dish with a little of the butter.\n        For the pie crust, blend the biscuits, sugar and remaining butter in a food processor until the mixture resembles breadcrumbs.\n        Transfer to the pie dish and spread over the bottom and up the sides, firmly pressing down.\n        Bake for 10 minutes, or until lightly browned. Remove from oven and place the dish on a wire rack to cool.\n        For the filling, whisk the egg yolks in a bowl. Gradually whisk in the condensed milk until smooth.\n        Mix in 6 tablespoons of lime juice, then pour the filling into the pie crust and level over with the back of a spoon.\n        Return to the oven for 15 minutes, then place on a wire rack to cool.\n        Once cooled, refrigerate for 6 hours or overnight.\n        To serve, whip the cream until it just holds stiff peaks. Add dollops of cream to the top of the pie, and grate over some lime zest, for extra zing if you like.\n    \n        Source: https://www.jamieoliver.com/recipes/fruit-recipes/key-lime-pie/",
 //       "email": "hello@email.com",
@@ -346,7 +375,7 @@ exports.searchRecipe = async (req, res) => {
 //       ],
 //       "category": "Chinese",
 //       "image": "stir-fried-vegetables.jpg"
-//     },{      
+//     },{
 //       "name": "New Chocolate Cake",
 //       "description": "Chocolate Cake Description...",
 //       "email": "hello@email.com",
