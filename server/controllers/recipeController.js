@@ -186,6 +186,28 @@ exports.submitRecipeOnPost = async (req, res) => {
   }
 };
 
+
+// update uploaded recipe
+// async function updateRecipe(){
+//   try {
+//     const res = await Recipe.updateOne({ name: 'New Recipe' }, {name: 'New Recipe Updated'});
+//     res.n; // Number of documents matched
+//     res.nModified // Number of documents modified
+//   } catch (error) {
+//     console.log(error);
+//   }
+// }
+// updateRecipe();
+
+
+
+
+
+
+
+
+
+
 // async function insertDummyCategoryData() {
 //   try {
 //     await Category.insertMany([
