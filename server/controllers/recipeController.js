@@ -80,7 +80,11 @@ exports.searchRecipe = async (req, res) => {
       $text: { $search: searchTerm, $diacriticSensitive: true },
     });
     // res.json(recipe);
-    res.render("search", { title: "Cooking Blog - Search", recipe, searchTerm });
+    res.render("search", {
+      title: "Cooking Blog - Search",
+      recipe,
+      searchTerm,
+    });
   } catch (error) {
     res.status(500).send({ message: error.message || "Error Occured" });
   }
@@ -91,37 +95,44 @@ exports.searchRecipe = async (req, res) => {
 exports.exploreLatest = async (req, res) => {
   try {
     const limitNumber = 20;
-    const recipe = await Recipe.find({ }).sort({ _id: -1}).limit(
-      limitNumber
-    );
-    
-    res.render("explore-latest", { title: "Cooking Blog - Explore Latest", recipe });
+    const recipe = await Recipe.find({}).sort({ _id: -1 }).limit(limitNumber);
+
+    res.render("explore-latest", {
+      title: "Cooking Blog - Explore Latest",
+      recipe,
+    });
   } catch (error) {
     res.status(500).send({ message: error.message || "Error Occured" });
   }
 };
 
+// GET /explore-random
+// Explore random
+exports.exploreRandom = async (req, res) => {
+  try {
+    let count = await Recipe.find().countDocuments();
+    let random = Math.floor(Math.random() * count);
+    let recipe = await Recipe.findOne().skip(random).exec();
+    // res.json(recipe)
 
+    res.render("explore-random", {
+      title: "Cooking Blog - Explore Random",
+      recipe,
+    });
+  } catch (error) {
+    res.status(500).send({ message: error.message || "Error Occured" });
+  }
+};
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+// POST /Submit-recipe
+// Submit recipe
+exports.submitRecipe = async (req, res) => {
+  try {
+    res.render("submit-recipe", { title: "Cooking Blog - Explore Random" });
+  } catch (error) {
+    res.status(500).send({ message: error.message || "Error Occured" });
+  }
+};
 
 // async function insertDummyCategoryData() {
 //   try {
