@@ -37,10 +37,6 @@ app.set("view engine", "ejs");
 const routes = require("./server/routes/recipeRoutes.js");
 app.use("/", routes);
 
-app.use("/what", () => {
-  console.log("testing chichi");
-});
-
 app.listen(port, () => {
   console.log(`Listening to port ${port}`);
 });
