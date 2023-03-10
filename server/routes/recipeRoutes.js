@@ -8,6 +8,7 @@ router.get('/recipe/:id', recipeController.exploreRecipe);
 router.get('/categories', recipeController.exploreCategories);
 router.get('/categories/:id', recipeController.exploreCategoriesById);
 router.post('/search', recipeController.searchRecipe);
+router.get('/about', recipeController.aboutAuthor);
 
 router.get('/explore-latest', recipeController.exploreLatest);
 router.get('/explore-random', recipeController.exploreRandom);
