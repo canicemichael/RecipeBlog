@@ -186,6 +186,19 @@ exports.submitRecipeOnPost = async (req, res) => {
   }
 };
 
+// GET /about-me
+// About author Page
+exports.aboutAuthor = async (req, res) => {
+  try {    
+    res.render("about", {
+      title: "Cooking Blog - About"
+    });
+  } catch (error) {
+    res.status(500).send({ message: error.message || "Error Occured" });
+  }
+};
+
+
 
 // update uploaded recipe
 // async function updateRecipe(){
